@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "gl/gl.hh"
+#include "gl/program.hh"
 #include "gl/shader.hh"
 #include "object_vbo.hh"
 
@@ -37,7 +38,15 @@ void init_shaders()
     gl::VertexShader vertex_shader(VERTEX_SHADER);
     gl::FragmentShader fragment_shader(FRAGMENT_SHADER);
 
-    // TODO
+    gl::Program program;
+
+    program.attach(vertex_shader);
+    program.attach(fragment_shader);
+
+    program.link();
+
+    program.use();
+
     std::cerr << "Done - Initializing shaders" << std::endl;
 }
 

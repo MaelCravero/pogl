@@ -13,7 +13,10 @@ namespace gl
         ~Shader();
         Shader(const Shader& other) = delete;
 
-        operator GLuint();
+        inline operator GLuint() const
+        {
+            return id_;
+        }
 
     protected:
         GLuint id_;

@@ -58,9 +58,4 @@ namespace gl
         glDeleteShader(id_);
     }
 
-    Shader::operator GLuint()
-    {
-        return id_;
-    }
-
 } // namespace gl

@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -fno-inline")
 
-set(SRC "src/main.cc" "src/gl/shader.cc")
+set(SRC "src/main.cc" "src/gl/shader.cc" "src/gl/program.cc")
 set(LIBRARIES GL GLU glut GLEW)
 
 set(INCLUDE_DIR "src")

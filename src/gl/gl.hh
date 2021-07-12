@@ -4,6 +4,7 @@
 
 // Freeglut must be imported after glew
 #include <GL/freeglut.h>
+#include <iostream>
 
 #define TEST_OPENGL_ERROR()                                                    \
     do                                                                         \

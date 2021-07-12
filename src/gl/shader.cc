@@ -21,7 +21,8 @@ namespace gl
         id_ = glCreateShader(type);
         TEST_OPENGL_ERROR();
 
-        const GLchar* chars = stream.str().c_str();
+        auto shader = stream.str();
+        const GLchar* chars = shader.c_str();
 
         glShaderSource(id_, 1, &chars, 0);
         TEST_OPENGL_ERROR();

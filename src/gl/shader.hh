@@ -1,16 +1,15 @@
 #pragma once
 
-#include <GL/glew.h>
-//
-#include <GL/freeglut.h>
 #include <string>
+
+#include "gl/gl.hh"
 
 namespace gl
 {
     class Shader
     {
     public:
-        Shader(std::string path, GLuint type);
+        Shader(std::string path, GLenum type);
         ~Shader();
         Shader(const Shader& other) = delete;
 

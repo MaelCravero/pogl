@@ -8,7 +8,7 @@
 #define VERTEX_SHADER "src/vertex.glsl"
 #define FRAGMENT_SHADER "src/fragment.glsl"
 
-static uint8_t color = 0;
+static GLuint program_id;
 
 GLuint VBO, VAO;
 
@@ -70,7 +70,17 @@ void init_vbo(const gl::Program& program)
 
 void idle()
 {
-    color++;
+    static std::uint8_t frame = 0;
+
+    float val = frame / 255.0f;
+
+    auto loc = glGetUniformLocation(program_id, "color");
+    glUniform4f(loc, 1.0f, val, 0.0f, 1.0f);
+
+    loc = glGetUniformLocation(program_id, "pos");
+    glUniform1f(loc, val);
+
+    frame++;
     glutPostRedisplay();
 }
 
@@ -89,14 +99,14 @@ void init_glut(int argc, char* argv[])
 
     glClearColor(0, 0, 0, 0);
     TEST_OPENGL_ERROR();
-    glMatrixMode(GL_PROJECTION);
-    TEST_OPENGL_ERROR();
-    glOrtho(-5, 5, -5, 5, 5, 15);
-    TEST_OPENGL_ERROR();
-    glMatrixMode(GL_MODELVIEW);
-    TEST_OPENGL_ERROR();
-    gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0);
-    TEST_OPENGL_ERROR();
+    /* glMatrixMode(GL_PROJECTION); */
+    /* TEST_OPENGL_ERROR(); */
+    /* glOrtho(-5, 5, -5, 5, 5, 15); */
+    /* TEST_OPENGL_ERROR(); */
+    /* glMatrixMode(GL_MODELVIEW); */
+    /* TEST_OPENGL_ERROR(); */
+    /* gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0); */
+    /* TEST_OPENGL_ERROR(); */
 }
 
 int main(int argc, char* argv[])
@@ -111,6 +121,8 @@ int main(int argc, char* argv[])
 
     init_shaders(vertex_shader, fragment_shader, program);
     init_vbo(program);
+
+    program_id = program;
 
     glutMainLoop();
 

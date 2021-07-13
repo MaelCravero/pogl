@@ -6,20 +6,12 @@
 
 namespace gl
 {
-    class Shader
+    class Shader : public Object
     {
     public:
         Shader(std::string path, GLenum type);
         ~Shader();
         Shader(const Shader& other) = delete;
-
-        inline operator GLuint() const
-        {
-            return id_;
-        }
-
-    protected:
-        GLuint id_;
     };
 
     class VertexShader : public Shader

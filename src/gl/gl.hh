@@ -14,3 +14,21 @@
             std::cerr << "OpenGL ERROR! " << __FILE__ << ": " << __LINE__      \
                       << std::endl;                                            \
     } while (0)
+
+namespace gl
+{
+    using id_t = GLuint;
+
+    class Object
+    {
+    public:
+        inline operator id_t() const
+        {
+            return id_;
+        }
+
+    protected:
+        id_t id_;
+    };
+
+} // namespace gl

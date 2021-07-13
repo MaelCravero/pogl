@@ -5,7 +5,7 @@
 
 namespace gl
 {
-    class Program
+    class Program : public Object
     {
     public:
         Program();
@@ -16,14 +16,6 @@ namespace gl
         void link() const;
 
         void use() const;
-
-        inline operator GLuint() const
-        {
-            return id_;
-        }
-
-    private:
-        GLuint id_;
     };
 
 } // namespace gl

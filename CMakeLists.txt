@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -fno-inline -g3")
 
 set(SRC "src/main.cc" "src/gl/shader.cc" "src/gl/program.cc"
-         "src/noise/perlin3d.cc")
+        "src/noise/perlin3d.cc" "src/gl/vao.cc" "src/gl/vbo.cc")
 set(LIBRARIES GL GLU glut GLEW)
 
 set(INCLUDE_DIR "src")

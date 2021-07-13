@@ -31,4 +31,10 @@ namespace gl
         id_t id_;
     };
 
+    inline void unbind()
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
 } // namespace gl

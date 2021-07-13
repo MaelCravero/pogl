@@ -4,13 +4,14 @@
 #include "gl/gl.hh"
 #include "gl/program.hh"
 #include "gl/shader.hh"
+#include "gl/vao.hh"
+#include "gl/vbo.hh"
 
 #define VERTEX_SHADER "src/vertex.glsl"
 #define FRAGMENT_SHADER "src/fragment.glsl"
 
 static GLuint program_id;
-
-GLuint VBO, VAO;
+GLuint VAO_id;
 
 void display()
 {
@@ -20,7 +21,7 @@ void display()
     /* glFlush(); */
 
     TEST_OPENGL_ERROR();
-    glBindVertexArray(VAO);
+    glBindVertexArray(VAO_id);
     TEST_OPENGL_ERROR();
     glDrawArrays(GL_TRIANGLES, 0, 3);
     TEST_OPENGL_ERROR();
@@ -48,24 +49,30 @@ void init_shaders(const gl::VertexShader& vertex_shader,
 
 void init_vbo(const gl::Program& program)
 {
-    float vertices[] = {
+    gl::VAO vao;
+    vao.bind();
+
+    gl::VBO vbo({
         -0.5f, -0.5f, 0.0f, // left
-        0.5f,  -0.5f, 0.0f, // right
-        0.0f,  0.5f,  0.0f // top
-    };
+        0.5f, -0.5f, 0.0f, // right
+        0.0f, 0.5f, 0.0f // top
+    });
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
+    // glGenBuffers(1, &VBO);
+    // glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
+    // GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-                          (void*)0);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
+    //(void*)0);
+
+    vbo.bind(0, 3);
+
+    gl::unbind();
+
+    VAO_id = vao;
 }
 
 void idle()

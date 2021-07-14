@@ -2,16 +2,14 @@
 
 #include <cassert>
 
-Particle::Particle(gl::VBO::data_t vertices, gl::VBO::data_t positions,
-                   gl::VBO::data_t colors, update_func_t update)
+Particle::Particle(vertices_t::data_t vertices, std::size_t nb_particles,
+                   update_func_t update)
+
     : vertices_(vertices)
-    , positions_(positions)
-    , colors_(colors)
+    , positions_(positions_t::data_t(nb_particles))
+    , colors_(colors_t::data_t(nb_particles))
     , update_(update)
-{
-    assert(vertices.size() == positions.size());
-    assert(vertices.size() == colors.size());
-}
+{}
 
 void Particle::update(float time)
 {

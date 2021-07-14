@@ -7,11 +7,14 @@
 class Particle
 {
 public:
+    using vertices_t = gl::VBO<GLfloat>;
+    using positions_t = gl::VBO<GLfloat>;
+    using colors_t = gl::VBO<GLfloat>;
     using update_func_t = std::function<void(float x, float y, float z,
                                              GLfloat& pos, GLfloat& color)>;
 
-    Particle(gl::VBO::data_t vertices, gl::VBO::data_t positions,
-             gl::VBO::data_t colors, update_func_t update);
+    Particle(vertices_t::data_t vertices, std::size_t nb_particles,
+             update_func_t update);
 
     void update(float time);
     void draw() const;
@@ -22,8 +25,8 @@ public:
     }
 
 private:
-    gl::VBO vertices_;
-    gl::VBO positions_;
-    gl::VBO colors_;
+    vertices_t vertices_;
+    positions_t positions_;
+    colors_t colors_;
     update_func_t update_;
 };

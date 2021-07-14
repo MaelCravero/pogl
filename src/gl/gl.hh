@@ -37,4 +37,14 @@ namespace gl
         glBindVertexArray(0);
     }
 
+    struct Point4D
+    {
+        GLfloat x, y, z, size;
+    };
+
+    struct Color
+    {
+        GLfloat r, g, b, a;
+    };
+
 } // namespace gl

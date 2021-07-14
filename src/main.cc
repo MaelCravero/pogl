@@ -1,3 +1,5 @@
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
@@ -6,6 +8,7 @@
 #include "gl/shader.hh"
 #include "gl/vao.hh"
 #include "gl/vbo.hh"
+#include "noise/perlin3d.hh"
 #include "particle.hh"
 
 #define VERTEX_SHADER "src/vertex.glsl"
@@ -13,15 +16,38 @@
 
 static GLuint program_id;
 GLuint VAO_id;
+noise::Perlin3D perlin;
+
+const std::size_t nb_particles = 10000;
+const float life_span = 50.0;
 
 auto update = [](std::size_t i, float time, gl::Point4D& pos, gl::Color& color,
                  float& life) {
-    pos.x -= 0.01;
-    color.g -= 0.01;
+    pos.y += 0.01;
+    color.g -= std::pow(1 - life / life_span, 2);
+    life -= perlin.normalized_noise(i, time, pos.y) - pos.y;
 };
 
 auto spawn = [](std::size_t i) -> std::pair<gl::Point4D, gl::Color> {
-    return {{0.1f * i, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f}};
+    gl::Color initial_color = {1.0f, 1.0f, 0.0f, 1.0f};
+
+    // t = 2*pi*random()
+    // u = random()+random()
+    // r = if u>1 then 2-u else u
+    //[r*cos(t), r*sin(t)]
+    auto rand = []() { return ((double)std::rand()) / RAND_MAX; };
+
+    auto t = 2 * 3.14 * rand();
+    auto u = rand() + rand();
+    auto r = u > 1 ? 2 - u : u;
+
+    float x = r * std::cos(t);
+    float y = r * std::sin(t);
+
+    // circle of radius 0.2 centered in (0, -0.8)
+    auto radius = 0.1f;
+
+    return {{radius * x, radius * y - 0.8f, 0.0f, 1.0f}, initial_color};
 };
 
 Particle* particle_ptr;
@@ -61,34 +87,6 @@ void init_shaders(const gl::VertexShader& vertex_shader,
     std::cerr << "Done - Initializing shaders" << std::endl;
 }
 
-void init_vbo(const gl::Program& program)
-{
-    gl::VAO vao;
-    vao.bind();
-
-    gl::VBO<GLfloat> vbo({
-        -0.5f, -0.5f, 0.0f, // left
-        0.5f, -0.5f, 0.0f, // right
-        0.0f, 0.5f, 0.0f // top
-    });
-
-    // glGenBuffers(1, &VBO);
-    // glBindVertexArray(VAO);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
-    // GL_STATIC_DRAW);
-
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),
-    //(void*)0);
-
-    vbo.bind(0, 3, GL_FLOAT, GL_FALSE);
-
-    gl::unbind();
-
-    VAO_id = vao;
-}
-
 void init_particles()
 {
     gl::VAO vao;
@@ -96,11 +94,12 @@ void init_particles()
 
     static Particle particle(
         {
-            -0.5f, -0.5f, 0.0f, // left
-            0.5f, -0.5f, 0.0f, // right
-            0.0f, 0.5f, 0.0f // top
+            -0.01f, -0.01f, 0.0f, // left
+            0.01f, -0.01f, 0.0f, // right
+            0.0f, 0.01f, 0.0f, // top
+            0.0f, -0.02f, 0.0f // top
         },
-        2, 2, update, spawn);
+        nb_particles, life_span, update, spawn);
 
     particle.bind();
 

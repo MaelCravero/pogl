@@ -37,9 +37,13 @@ void Particle::spawn(std::size_t i)
 void Particle::update(float time)
 {
     for (auto i = 0u; i < nb_particles_; i++)
-        // FIXME pos
+    {
         update_(i, time, positions_.data_get()[i], colors_.data_get()[i],
                 life_[i]);
+
+        if (life_[i] < 0)
+            spawn(i);
+    }
 
     positions_.update();
     colors_.update();

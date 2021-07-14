@@ -14,6 +14,11 @@ namespace noise
         // Compute noise value in range [-1.0, 1.0]
         float generate_noise_point(float x, float y, float z) const;
 
+        inline float normalized_noise(float x, float y, float z) const
+        {
+            return (generate_noise_point(x, y, z) + 1.0) / 2.0;
+        }
+
     private:
         // Quintic smooth gradient
         float fade(float t) const;

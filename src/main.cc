@@ -1,8 +1,10 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <vector>
 
+#include "engine.hh"
 #include "gl/gl.hh"
 #include "gl/program.hh"
 #include "gl/shader.hh"
@@ -14,8 +16,8 @@
 #define VERTEX_SHADER "src/vertex.glsl"
 #define FRAGMENT_SHADER "src/fragment.glsl"
 
-static GLuint program_id;
-GLuint VAO_id;
+static std::unique_ptr<Engine> engine = nullptr;
+
 noise::Perlin3D perlin;
 
 const std::size_t nb_particles = 100000;
@@ -63,54 +65,47 @@ auto spawn = [](std::size_t i) -> std::pair<gl::Point4D, gl::Color> {
     float y = r * std::sin(t);
 
     // circle of radius centered in (0, -0.8)
-    auto radius = 0.1f;
+    auto x_radius = 0.1f;
+    auto y_radius = 0.05f;
 
-    return {{radius * x, radius * y - 0.8f, 0.0f, 1.0f}, initial_color};
+    return {{x_radius * x, y_radius * y - 0.8f, 0.0f, 1.0f}, initial_color};
 };
-
-Particle* particle_ptr;
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    // glColor3b(color, 0, 0);
-    // glutWireTeapot(3);
-    // glFlush();
+    TEST_OPENGL_ERROR();
 
-    TEST_OPENGL_ERROR();
-    glBindVertexArray(VAO_id);
-    TEST_OPENGL_ERROR();
-    particle_ptr->draw();
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
-    // TEST_OPENGL_ERROR();
-    glBindVertexArray(0);
-    TEST_OPENGL_ERROR();
+    engine->bind_vao();
+
+    engine->draw();
+
+    gl::unbind();
+
     glutSwapBuffers();
     TEST_OPENGL_ERROR();
 }
 
-void init_shaders(const gl::VertexShader& vertex_shader,
-                  const gl::FragmentShader& fragment_shader,
-                  const gl::Program& program)
+void idle()
 {
-    std::cerr << "Initializing shaders" << std::endl;
-
-    program.attach(vertex_shader);
-    program.attach(fragment_shader);
-
-    program.link();
-
-    program.use();
-
-    std::cerr << "Done - Initializing shaders" << std::endl;
+    engine->update();
+    glutPostRedisplay();
 }
 
-void init_particles()
+int main(int argc, char* argv[])
 {
-    gl::VAO vao;
-    vao.bind();
+    Engine::init(argc, argv);
 
-    static Particle particle(
+    engine.reset(new Engine());
+
+    gl::VertexShader vertex_shader(VERTEX_SHADER);
+    gl::FragmentShader fragment_shader(FRAGMENT_SHADER);
+
+    engine->init_shaders(vertex_shader, fragment_shader);
+
+    engine->bind_vao();
+
+    Particle particle(
         {
             -0.01f, -0.01f, 0.0f, // left
             0.01f, -0.01f, 0.0f, // right
@@ -121,76 +116,17 @@ void init_particles()
 
     particle.bind();
 
+    engine->draw = [&]() { particle.draw(); };
+    engine->update = [&]() {
+        static std::uint8_t frame = 0;
+        float val = frame / 255.0f;
+        particle.update(val);
+        frame++;
+    };
+
     gl::unbind();
 
-    VAO_id = vao;
-    particle_ptr = &particle;
-}
-
-void idle()
-{
-    static std::uint8_t frame = 0;
-
-    float val = frame / 255.0f;
-
-    // auto loc = glGetUniformLocation(program_id, "color");
-    // glUniform4f(loc, 1.0f, val, 0.0f, 1.0f);
-
-    // loc = glGetUniformLocation(program_id, "pos");
-    // glUniform1f(loc, val);
-
-    particle_ptr->update(val);
-
-    frame++;
-    glutPostRedisplay();
-}
-
-void init_glut(int argc, char* argv[])
-{
-    glutInit(&argc, argv);
-    glutInitContextVersion(4, 5);
-    glutInitContextProfile(GLUT_CORE_PROFILE | GLUT_DEBUG);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowPosition(100, 100);
-    glutInitWindowSize(300, 300);
-    glutCreateWindow("POGL");
-
-    glutDisplayFunc(display);
-    glutIdleFunc(idle);
-
-    glClearColor(0, 0, 0, 0);
-    TEST_OPENGL_ERROR();
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    /* glMatrixMode(GL_PROJECTION); */
-    /* TEST_OPENGL_ERROR(); */
-    /* glOrtho(-5, 5, -5, 5, 5, 15); */
-    /* TEST_OPENGL_ERROR(); */
-    /* glMatrixMode(GL_MODELVIEW); */
-    /* TEST_OPENGL_ERROR(); */
-    /* gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0); */
-    /* TEST_OPENGL_ERROR(); */
-}
-
-int main(int argc, char* argv[])
-{
-    init_glut(argc, argv);
-    glewInit();
-
-    gl::VertexShader vertex_shader(VERTEX_SHADER);
-    gl::FragmentShader fragment_shader(FRAGMENT_SHADER);
-
-    gl::Program program;
-
-    init_shaders(vertex_shader, fragment_shader, program);
-    // init_vbo(program);
-    init_particles();
-
-    program_id = program;
-
-    glutMainLoop();
+    engine->main_loop(display, idle);
 
     return 0;
 }

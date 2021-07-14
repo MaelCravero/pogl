@@ -20,7 +20,8 @@ set(SRC
     "src/gl/program.cc"
     "src/noise/perlin3d.cc"
     "src/gl/vao.cc"
-    "src/particle.cc"
+    "src/particles/particle.cc"
+    "src/particles/fire.cc"
     "src/engine.cc")
 
 set(LIBRARIES GL GLU glut GLEW)

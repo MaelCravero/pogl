@@ -18,14 +18,32 @@ static GLuint program_id;
 GLuint VAO_id;
 noise::Perlin3D perlin;
 
-const std::size_t nb_particles = 10000;
-const float life_span = 50.0;
+const std::size_t nb_particles = 100000;
+const float life_span = 15.0;
 
 auto update = [](std::size_t i, float time, gl::Point4D& pos, gl::Color& color,
                  float& life) {
+    auto k = 0.01f;
+    auto sparsity = 15.0f;
+
+    if (i > nb_particles / 2)
+        sparsity *= 3;
+
+    auto wind_intensity = perlin.generate_noise_point(
+        sparsity * pos.x, sparsity * pos.y, sparsity * time);
+
     pos.y += 0.01;
-    color.g -= std::pow(1 - life / life_span, 2);
-    life -= perlin.normalized_noise(i, time, pos.y) - pos.y;
+    pos.x += k * wind_intensity;
+
+    auto color_decrement = std::pow(1 - life / life_span, 2);
+    if (color.g > 0)
+        color.g -= 4 * color_decrement * (color.g < 0.5 ? 0.1 : 1);
+    else
+        color.a -= k * color_decrement;
+    color.a -= k * (std::abs(wind_intensity) + (pos.y + 1.0));
+
+    life -= std::abs(wind_intensity);
+    life -= k * (pos.y + 1.0);
 };
 
 auto spawn = [](std::size_t i) -> std::pair<gl::Point4D, gl::Color> {
@@ -44,7 +62,7 @@ auto spawn = [](std::size_t i) -> std::pair<gl::Point4D, gl::Color> {
     float x = r * std::cos(t);
     float y = r * std::sin(t);
 
-    // circle of radius 0.2 centered in (0, -0.8)
+    // circle of radius centered in (0, -0.8)
     auto radius = 0.1f;
 
     return {{radius * x, radius * y - 0.8f, 0.0f, 1.0f}, initial_color};
@@ -142,6 +160,10 @@ void init_glut(int argc, char* argv[])
 
     glClearColor(0, 0, 0, 0);
     TEST_OPENGL_ERROR();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     /* glMatrixMode(GL_PROJECTION); */
     /* TEST_OPENGL_ERROR(); */
     /* glOrtho(-5, 5, -5, 5, 5, 15); */

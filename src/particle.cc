@@ -41,8 +41,13 @@ void Particle::update(float time)
         update_(i, time, positions_.data_get()[i], colors_.data_get()[i],
                 life_[i]);
 
-        if (life_[i] < 0)
+        auto rand = []() -> float { return ((double)std::rand()) / RAND_MAX; };
+
+        if (rand() > life_[i])
+        {
             spawn(i);
+            life_[i] = life_span_;
+        }
     }
 
     positions_.update();

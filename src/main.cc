@@ -23,7 +23,7 @@
 static std::unique_ptr<Engine> engine = nullptr;
 
 const std::size_t nb_particles = 200000;
-const float life_span = 12.0;
+const float life_span = 10.0;
 
 static std::unique_ptr<camera::Camera> cam = nullptr;
 
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 
     engine->bind_vao();
 
-    particles::Fire3D particle(nb_particles, life_span);
+    particles::Fire particle(nb_particles, life_span);
 
     particle.bind();
 

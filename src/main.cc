@@ -11,6 +11,7 @@
 #include "gl/vbo.hh"
 #include "noise/perlin3d.hh"
 #include "particles/fire.hh"
+#include "particles/sun.hh"
 
 #define VERTEX_SHADER "src/vertex.glsl"
 #define FRAGMENT_SHADER "src/fragment.glsl"
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
 
     engine->bind_vao();
 
-    particles::Fire particle(nb_particles, life_span);
+    particles::Sun particle(nb_particles, life_span);
 
     particle.bind();
 

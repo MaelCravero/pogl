@@ -22,6 +22,7 @@ set(SRC
     "src/gl/vao.cc"
     "src/particles/particle.cc"
     "src/particles/fire.cc"
+    "src/particles/sun.cc"
     "src/engine.cc")
 
 set(LIBRARIES GL GLU glut GLEW)

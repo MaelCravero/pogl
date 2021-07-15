@@ -32,7 +32,6 @@ set(INCLUDE_DIR "src")
 
 add_executable(pogl)
 target_sources(pogl PRIVATE ${SRC})
-target_include_directories(pogl PRIVATE ${INCLUDE_DIR} ${GLM_INCLUDE_DIRS}
-                           ${GLFW_LIBRARIES})
+target_include_directories(pogl PRIVATE ${INCLUDE_DIR})
 
-target_link_libraries(pogl PRIVATE ${LIBRARIES} glfw)
+target_link_libraries(pogl PRIVATE ${LIBRARIES})

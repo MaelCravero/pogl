@@ -1,9 +1,10 @@
 #include <cstdlib>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <memory>
 #include <vector>
-#include <glm/gtc/type_ptr.hpp>
 
+#include "camera.hh"
 #include "engine.hh"
 #include "gl/gl.hh"
 #include "gl/program.hh"
@@ -13,7 +14,6 @@
 #include "noise/perlin3d.hh"
 #include "particles/fire.hh"
 #include "particles/sun.hh"
-#include "camera.hh"
 
 #define VERTEX_SHADER "src/vertex.glsl"
 #define FRAGMENT_SHADER "src/fragment.glsl"

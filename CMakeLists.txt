@@ -23,7 +23,8 @@ set(SRC
     "src/particles/particle.cc"
     "src/particles/fire.cc"
     "src/particles/sun.cc"
-    "src/engine.cc")
+    "src/engine.cc"
+    "src/camera.cc")
 
 set(LIBRARIES GL GLU glut GLEW)
 
@@ -31,6 +32,7 @@ set(INCLUDE_DIR "src")
 
 add_executable(pogl)
 target_sources(pogl PRIVATE ${SRC})
-target_include_directories(pogl PRIVATE ${INCLUDE_DIR})
+target_include_directories(pogl PRIVATE ${INCLUDE_DIR} ${GLM_INCLUDE_DIRS}
+                           ${GLFW_LIBRARIES})
 
-target_link_libraries(pogl PRIVATE ${LIBRARIES})
+target_link_libraries(pogl PRIVATE ${LIBRARIES} glfw)

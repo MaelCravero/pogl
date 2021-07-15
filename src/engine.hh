@@ -24,10 +24,10 @@ public:
     }
 
 private:
-    gl::Program program_;
     gl::VAO vao_;
 
 public:
+    gl::Program program_;
     update_t draw = []() {};
     update_t update = []() {};
 };

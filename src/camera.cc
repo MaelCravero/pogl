@@ -11,7 +11,7 @@ namespace camera
         static double y_mouse = 0;
 
         // Mouse settings
-        static float speed = 0.1f;
+        static float speed = 0.01f;
         static float mouse_speed = 0.005f;
 
         static float time_delta = 1.0f;
@@ -28,6 +28,9 @@ namespace camera
 
         void mouse_callback(int x, int y)
         {
+            window_width = glutGet(GLUT_WINDOW_WIDTH);
+            window_height = glutGet(GLUT_WINDOW_HEIGHT);
+
             x_mouse = (window_width / 2.0) - x;
             y_mouse = (window_height / 2.0) - y;
 

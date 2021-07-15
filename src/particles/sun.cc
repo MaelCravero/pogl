@@ -58,14 +58,14 @@ namespace particles
 
         pos.x += k * wind_intensity * direction_[i].x;
         pos.y += k * wind_intensity * direction_[i].y;
-        // pos.z += wind_intensity * direction_[i].z;
+        pos.z += k * wind_intensity * direction_[i].z;
         // pos.x += k * wind_intensity;
 
         color.a -= color.a * k * (std::abs(wind_intensity) + (pos.y + 1.0));
 
         color.g -= color.a * k * (std::abs(wind_intensity) + (pos.y + 1.0));
 
-        life -= k * std::abs(wind_intensity);
+        life -= 2 * k * std::abs(wind_intensity);
 
         if (color.a < 0.01)
             life = 0;

@@ -40,12 +40,18 @@ namespace particles
         float y = r * std::sin(t);
 
         // circle of radius centered in (0, -0.8)
-        auto x_radius = 0.1f;
+        auto x_radius = 2.1f;
+        // auto x_radius = 0.1f;
         auto y_radius = 0.05f;
 
         initial_color.g -= std::sqrt(x * x + y * y) / 3;
 
-        return {{x_radius * x, y_radius * y - 0.8f, 0.0f, 1.0f}, initial_color};
+        auto center_x = 0.0f;
+        auto center_y = -1.0f;
+        // auto center_y = -0.8f;
+
+        return {{x_radius * x + center_x, y_radius * y + center_y, 0.0f, 1.0f},
+                initial_color};
     }
 
     void Fire::update_sub(std::size_t i, float time, gl::Point4D& pos,
@@ -67,7 +73,7 @@ namespace particles
         if (color.g > 0)
             color.g -= 4 * color_decrement * (color.g < 0.5 ? 0.1 : 1);
         else
-            color.a -= k * color_decrement;
+            color.a -= 3 * k * color_decrement;
         color.a -= k * (std::abs(wind_intensity) + (pos.y + 1.0));
 
         life -= std::abs(wind_intensity);

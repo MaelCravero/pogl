@@ -13,14 +13,16 @@
 #include "gl/vbo.hh"
 #include "noise/perlin3d.hh"
 #include "particles/fire.hh"
+#include "particles/fire3d.hh"
 #include "particles/sun.hh"
+#include "particles/sun3d.hh"
 
 #define VERTEX_SHADER "src/vertex.glsl"
 #define FRAGMENT_SHADER "src/fragment.glsl"
 
 static std::unique_ptr<Engine> engine = nullptr;
 
-const std::size_t nb_particles = 100000;
+const std::size_t nb_particles = 200000;
 const float life_span = 12.0;
 
 static std::unique_ptr<camera::Camera> cam = nullptr;
@@ -65,7 +67,7 @@ int main(int argc, char* argv[])
 
     engine->bind_vao();
 
-    particles::Sun particle(nb_particles, life_span);
+    particles::Fire3D particle(nb_particles, life_span);
 
     particle.bind();
 

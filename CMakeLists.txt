@@ -23,6 +23,8 @@ set(SRC
     "src/particles/particle.cc"
     "src/particles/fire.cc"
     "src/particles/sun.cc"
+    "src/particles/sun3d.cc"
+    "src/particles/fire3d.cc"
     "src/engine.cc"
     "src/camera.cc")
 

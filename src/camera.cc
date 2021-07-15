@@ -22,6 +22,7 @@ namespace camera
         static float vertical_angle = 0.0f;
 
         // Window size
+
         static int window_width = 0;
         static int window_height = 0;
 
@@ -89,7 +90,7 @@ namespace camera
 
     glm::mat4 Camera::compute_projection_matrix() const
     {
-        return glm::perspective(glm::radians(fov), 4.0f / 3.0f, 0.1f, 100.0f);
+        return glm::perspective(glm::radians(fov), 16.0f / 9.0f, 0.1f, 100.0f);
     }
 
     glm::mat4 Camera::compute_view_matrix()

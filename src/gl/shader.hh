@@ -30,4 +30,12 @@ namespace gl
         {}
     };
 
+    class ComputeShader : public Shader
+    {
+    public:
+        ComputeShader(std::string path)
+            : Shader(path, GL_COMPUTE_SHADER)
+        {}
+    };
+
 } // namespace gl

@@ -60,4 +60,12 @@ namespace gl
         TEST_OPENGL_ERROR();
     }
 
+    void Program::dispatch_compute(int x, int y, int z) const
+    {
+        glDispatchCompute(x, y, z);
+        TEST_OPENGL_ERROR();
+        glMemoryBarrier(GL_ALL_BARRIER_BITS);
+        TEST_OPENGL_ERROR();
+    }
+
 } // namespace gl

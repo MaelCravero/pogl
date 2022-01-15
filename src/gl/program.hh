@@ -16,6 +16,7 @@ namespace gl
         void link() const;
 
         void use() const;
+        void dispatch_compute(int x, int y, int z) const;
     };
 
 } // namespace gl

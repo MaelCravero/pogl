@@ -15,10 +15,11 @@ namespace particles
         using vertices_t = gl::VBO<GLfloat>;
         using positions_t = gl::VBO<gl::Point4D>;
         using colors_t = gl::VBO<gl::Color>;
-        using life_t = std::vector<float>;
+        using life_t = gl::VBO<GLfloat>;
 
-        using positions_ssbo_t = gl::SSBO<gl::Point4D>;
-        using colors_ssbo_t = gl::SSBO<gl::Color>;
+        using positions_ssbo = gl::SSBO<gl::Point4D>;
+        using colors_ssbo = gl::SSBO<gl::Color>;
+        using life_ssbo = gl::SSBO<GLfloat>;
 
         ComputeParticle(vertices_t::data_t vertices, std::size_t nb_particles,
                         life_t::value_type life_span, gl::Program& main_prog);
@@ -47,7 +48,15 @@ namespace particles
 
         gl::Program& main_prog_;
         gl::Program update_prog_;
+        gl::Program spawn_prog_;
 
-        std::unique_ptr<positions_ssbo_t> pos_data_ = nullptr;
+        struct ssbo_data
+        {
+            positions_ssbo positions;
+            colors_ssbo colors;
+            life_ssbo life;
+        };
+
+        std::unique_ptr<ssbo_data> data_ = nullptr;
     };
 } // namespace particles

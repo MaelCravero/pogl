@@ -13,6 +13,8 @@ public:
 
     static void init(int argc, char** argv);
 
+    void attach(const gl::Shader& shader) const;
+
     void init_shaders(const gl::VertexShader& vertex_shader,
                       const gl::FragmentShader& fragment_shader) const;
 
@@ -27,7 +29,7 @@ private:
     gl::VAO vao_;
 
 public:
-    gl::Program program_;
+    gl::Program program;
     update_t draw = []() {};
     update_t update = []() {};
 };

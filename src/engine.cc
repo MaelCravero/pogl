@@ -28,15 +28,20 @@ void Engine::init(int argc, char** argv)
     glewInit();
 }
 
+void Engine::attach(const gl::Shader& shader) const
+{
+    program.attach(shader);
+}
+
 void Engine::init_shaders(const gl::VertexShader& vertex_shader,
                           const gl::FragmentShader& fragment_shader) const
 {
-    program_.attach(vertex_shader);
-    program_.attach(fragment_shader);
+    attach(vertex_shader);
+    attach(fragment_shader);
 
-    program_.link();
+    program.link();
 
-    program_.use();
+    program.use();
 }
 
 void Engine::main_loop(callback_t display, callback_t idle) const

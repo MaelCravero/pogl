@@ -4,6 +4,7 @@
 
 // Freeglut must be imported after glew
 #include <GL/freeglut.h>
+#include <cassert>
 #include <iostream>
 
 #define TEST_OPENGL_ERROR()                                                    \
@@ -11,9 +12,12 @@
     {                                                                          \
         GLenum err = glGetError();                                             \
         if (err != GL_NO_ERROR)                                                \
+        {                                                                      \
             std::cerr << "OpenGL ERROR! " << __FILE__ << ":" << __FUNCTION__   \
                       << ":" << __LINE__ << " : " << gluErrorString(err)       \
                       << std::endl;                                            \
+            assert(0);                                                         \
+        }                                                                      \
     } while (0)
 
 namespace gl

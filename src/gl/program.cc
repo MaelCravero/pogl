@@ -75,12 +75,21 @@ namespace gl
     {
         auto loc = uniform_location(name);
         glUniform1f(loc, v1);
+        TEST_OPENGL_ERROR();
+    }
+
+    void Program::set_uniform(std::string name, GLuint v1)
+    {
+        auto loc = uniform_location(name);
+        glUniform1ui(loc, v1);
+        TEST_OPENGL_ERROR();
     }
 
     void Program::set_uniform(std::string name, GLfloat v1, GLfloat v2)
     {
         auto loc = uniform_location(name);
         glUniform2f(loc, v1, v2);
+        TEST_OPENGL_ERROR();
     }
 
     void Program::set_uniform(std::string name, GLfloat v1, GLfloat v2,
@@ -88,6 +97,7 @@ namespace gl
     {
         auto loc = uniform_location(name);
         glUniform3f(loc, v1, v2, v3);
+        TEST_OPENGL_ERROR();
     }
 
     void Program::set_uniform(std::string name, GLfloat v1, GLfloat v2,
@@ -95,6 +105,7 @@ namespace gl
     {
         auto loc = uniform_location(name);
         glUniform4f(loc, v1, v2, v3, v4);
+        TEST_OPENGL_ERROR();
     }
 
     GLuint Program::uniform_location(std::string name)

@@ -20,6 +20,7 @@ set(SRC
     "src/gl/program.cc"
     "src/noise/perlin3d.cc"
     "src/gl/vao.cc"
+    "src/particles/compute-particle.cc"
     "src/particles/particle.cc"
     "src/particles/fire.cc"
     "src/particles/sun.cc"

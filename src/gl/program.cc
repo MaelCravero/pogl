@@ -71,4 +71,36 @@ namespace gl
         TEST_OPENGL_ERROR();
     }
 
+    void Program::set_uniform(std::string name, GLfloat v1)
+    {
+        auto loc = uniform_location(name);
+        glUniform1f(loc, v1);
+    }
+
+    void Program::set_uniform(std::string name, GLfloat v1, GLfloat v2)
+    {
+        auto loc = uniform_location(name);
+        glUniform2f(loc, v1, v2);
+    }
+
+    void Program::set_uniform(std::string name, GLfloat v1, GLfloat v2,
+                              GLfloat v3)
+    {
+        auto loc = uniform_location(name);
+        glUniform3f(loc, v1, v2, v3);
+    }
+
+    void Program::set_uniform(std::string name, GLfloat v1, GLfloat v2,
+                              GLfloat v3, GLfloat v4)
+    {
+        auto loc = uniform_location(name);
+        glUniform4f(loc, v1, v2, v3, v4);
+    }
+
+    GLuint Program::uniform_location(std::string name)
+    {
+        auto loc = glGetUniformLocation(id_, name.c_str());
+        TEST_OPENGL_ERROR();
+        return loc;
+    }
 } // namespace gl

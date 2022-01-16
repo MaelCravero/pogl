@@ -17,6 +17,15 @@ namespace gl
 
         void use() const;
         void dispatch_compute(int x, int y, int z) const;
+
+        void set_uniform(std::string name, GLfloat v1);
+        void set_uniform(std::string name, GLfloat v1, GLfloat v2);
+        void set_uniform(std::string name, GLfloat v1, GLfloat v2, GLfloat v3);
+        void set_uniform(std::string name, GLfloat v1, GLfloat v2, GLfloat v3,
+                         GLfloat v4);
+
+    private:
+        GLuint uniform_location(std::string name);
     };
 
 } // namespace gl

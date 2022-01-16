@@ -3,6 +3,8 @@
 #include <cassert>
 #include <cmath>
 
+#include "noise/perlin3d.hh"
+
 namespace particles
 {
     ComputeParticle::ComputeParticle(vertices_t::data_t vertices,
@@ -22,8 +24,15 @@ namespace particles
         gl::ComputeShader update_shader("data/update.glsl");
         gl::ComputeShader spawn_shader("data/spawn.glsl");
 
+        noise::Perlin3D noise;
+
         update_prog_.attach(update_shader);
         update_prog_.link();
+
+        update_prog_.use();
+        update_prog_.set_uniform("nb_particles", (GLuint)nb_particles);
+        update_prog_.set_uniform_array("p", noise.p);
+        update_prog_.set_uniform("life_span", life_span);
 
         spawn_prog_.attach(spawn_shader);
         spawn_prog_.link();
@@ -62,13 +71,18 @@ namespace particles
 
     void ComputeParticle::update(float time)
     {
-        (void)time;
-
         update_prog_.use();
+        update_prog_.set_uniform("time", time);
+
         data_->positions.bind();
+        data_->colors.bind();
+        data_->life.bind();
+
         update_prog_.dispatch_compute(nb_particles_ / 1024 + 1, 1, 1);
 
         main_prog_.use();
+
+        spawn();
     }
 
     void ComputeParticle::draw() const

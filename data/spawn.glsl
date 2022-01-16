@@ -33,11 +33,17 @@ float rand(float v)
     return _rand(vec2(v, gl_GlobalInvocationID.x));
 }
 
+float x_radius = 0.1f;
+float y_radius = 0.05f;
+
+float center_x = 0.0f;
+float center_y = -0.8f;
+
 void main()
 {
     uint X = gl_GlobalInvocationID.x;
 
-    if (life[X] > life_span)
+    if (life[X] > random.x)
         return;
 
     float t = 3.0f * 3.14f * rand(random.x);
@@ -46,12 +52,6 @@ void main()
 
     float x = r * cos(t);
     float y = r * sin(t);
-
-    float x_radius = 0.1f;
-    float y_radius = 0.05f;
-
-    float center_x = 0.0f;
-    float center_y = -0.8f;
 
     pos[X] = vec4(x_radius * x + center_x, y_radius * y + center_y, 0.0f, 1.0f);
 

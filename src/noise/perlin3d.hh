@@ -28,7 +28,10 @@ namespace noise
         // Pick a random directional vector for gradient
         float grad(int hash, float x, float y, float z) const;
 
+    public:
         std::array<int, 512> p;
+
+    private:
         const std::array<int, 256> permutation = {
             151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194,
             233, 7,   225, 140, 36,  103, 30,  69,  142, 8,   99,  37,  240,

@@ -23,7 +23,7 @@
 
 static std::unique_ptr<Engine> engine = nullptr;
 
-const std::size_t nb_particles = 2000000;
+const std::size_t nb_particles = 1000000;
 const float life_span = 10.0;
 
 static std::unique_ptr<camera::Camera> cam = nullptr;

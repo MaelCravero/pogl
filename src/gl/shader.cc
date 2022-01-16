@@ -16,6 +16,30 @@ namespace gl
             std::cerr << "Failed reading " << path << std::endl;
         }
 
+        std::string directive, argument;
+
+        file >> directive >> argument;
+
+        if (directive == "#include")
+        {
+            // Remove quotes
+            argument.erase(0, 1);
+            argument.erase(argument.size() - 1);
+
+            std::cerr << "Including " << argument << std::endl;
+            std::ifstream include(argument);
+
+            if (include.fail())
+            {
+                std::cerr << "Failed reading " << argument << std::endl;
+                stream << directive << ' ' << argument << '\n';
+            }
+            else
+                stream << include.rdbuf();
+        }
+        else
+            stream << directive << ' ' << argument << '\n';
+
         stream << file.rdbuf();
 
         id_ = glCreateShader(type);

@@ -10,9 +10,11 @@ namespace gl
     class VBO : public Object
     {
     public:
+        using value_type = T;
         using data_t = std::vector<T>;
 
         VBO(data_t data);
+        VBO(std::size_t size);
         ~VBO() = default;
         VBO(const VBO& other) = delete;
 

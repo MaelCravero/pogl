@@ -48,4 +48,9 @@ namespace gl
         GLfloat r, g, b, a;
     };
 
+    inline GLfloat rand()
+    {
+        return ((double)std::rand()) / RAND_MAX;
+    }
+
 } // namespace gl

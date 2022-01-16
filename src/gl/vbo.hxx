@@ -20,6 +20,11 @@ namespace gl
     }
 
     template <typename T>
+    VBO<T>::VBO(std::size_t size)
+        : VBO(data_t(size))
+    {}
+
+    template <typename T>
     void VBO<T>::update() const
     {
         glBindBuffer(GL_ARRAY_BUFFER, id_);

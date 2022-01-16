@@ -21,12 +21,12 @@ uniform uint nb_particles;
 uniform float life_span;
 uniform float time;
 
+float k = 0.03;
+float sparsity = 10.0;
+
 void main()
 {
     uint X = gl_GlobalInvocationID.x;
-
-    float k = 0.03;
-    float sparsity = 10.0;
 
     if (X > nb_particles / 2)
         sparsity *= 3;

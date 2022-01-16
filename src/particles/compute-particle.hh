@@ -3,6 +3,7 @@
 #include <functional>
 #include <memory>
 
+#include "data-pack.hh"
 #include "gl/program.hh"
 #include "gl/ssbo.hh"
 #include "gl/vbo.hh"
@@ -21,8 +22,8 @@ namespace particles
         using colors_ssbo = gl::SSBO<gl::Color>;
         using life_ssbo = gl::SSBO<GLfloat>;
 
-        ComputeParticle(vertices_t::data_t vertices, std::size_t nb_particles,
-                        life_t::value_type life_span, gl::Program& main_prog);
+        ComputeParticle(const DataPack& data, std::size_t nb_particles,
+                        gl::Program& main_prog);
 
         void bind() const;
 

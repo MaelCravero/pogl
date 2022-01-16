@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "camera.hh"
+#include "data-pack.hh"
 #include "engine.hh"
 #include "gl/gl.hh"
 #include "gl/program.hh"
@@ -23,8 +24,7 @@
 
 static std::unique_ptr<Engine> engine = nullptr;
 
-const std::size_t nb_particles = 1000000;
-const float life_span = 10.0;
+static std::size_t nb_particles = 1000000;
 
 static std::unique_ptr<camera::Camera> cam = nullptr;
 
@@ -58,6 +58,17 @@ int main(int argc, char* argv[])
 {
     Engine::init(argc, argv);
 
+    if (argc != 3 && argc != 2)
+    {
+        std::cerr << "usage: " << argv[0] << " data-path [nb_particles]\n";
+        return 1;
+    }
+
+    DataPack data(argv[1]);
+
+    if (argc == 3)
+        nb_particles = std::stoi(argv[2]);
+
     engine.reset(new Engine());
     cam.reset(new camera::Camera());
 
@@ -75,8 +86,7 @@ int main(int argc, char* argv[])
         0.0f,   0.01f,  0.0f, // top
         0.0f,   -0.02f, 0.0f // top
     };
-    particles::ComputeParticle particle(vertices, nb_particles, life_span,
-                                        engine->program);
+    particles::ComputeParticle particle(data, nb_particles, engine->program);
     // particles::Fire particle(nb_particles, life_span);
 
     particle.bind();

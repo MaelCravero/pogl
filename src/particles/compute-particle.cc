@@ -7,22 +7,20 @@
 
 namespace particles
 {
-    ComputeParticle::ComputeParticle(vertices_t::data_t vertices,
+    ComputeParticle::ComputeParticle(const DataPack& data,
                                      std::size_t nb_particles,
-                                     life_t::value_type life_span,
                                      gl::Program& main_prog)
 
-        : vertices_(vertices)
+        : vertices_(data.vertices)
         , nb_particles_(nb_particles)
         , positions_(nb_particles)
         , colors_(nb_particles)
         , life_(nb_particles)
-        , life_span_(life_span)
+        , life_span_(data.life_span)
         , main_prog_(main_prog)
-        , update_prog_()
     {
-        gl::ComputeShader update_shader("data/update.glsl");
-        gl::ComputeShader spawn_shader("data/spawn.glsl");
+        gl::ComputeShader update_shader(data.update_path);
+        gl::ComputeShader spawn_shader(data.spawn_path);
 
         noise::Perlin3D noise;
 
@@ -32,14 +30,16 @@ namespace particles
         update_prog_.use();
         update_prog_.set_uniform("nb_particles", (GLuint)nb_particles);
         update_prog_.set_uniform_array("p", noise.p);
-        update_prog_.set_uniform("life_span", life_span);
+        update_prog_.set_uniform("life_span", life_span_);
 
         spawn_prog_.attach(spawn_shader);
         spawn_prog_.link();
 
         spawn_prog_.use();
-        spawn_prog_.set_uniform("life_span", life_span);
-        spawn_prog_.set_uniform("initial_color", 1.0f, 1.0f, 0.0f, 1.0f);
+        spawn_prog_.set_uniform("life_span", life_span_);
+        spawn_prog_.set_uniform("initial_color", data.initial_color.r,
+                                data.initial_color.g, data.initial_color.b,
+                                data.initial_color.a);
 
         data_.reset(new ssbo_data{positions_ssbo(positions_, 0),
                                   colors_ssbo(colors_, 1),

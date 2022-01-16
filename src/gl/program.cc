@@ -33,11 +33,13 @@ namespace gl
 
         auto link_status = GL_TRUE;
         glGetProgramiv(id_, GL_LINK_STATUS, &link_status);
+        TEST_OPENGL_ERROR();
 
         if (!link_status)
         {
             GLint log_size;
             glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &log_size);
+            TEST_OPENGL_ERROR();
 
             std::string log;
             log.reserve(log_size + 1);
@@ -45,6 +47,7 @@ namespace gl
             GLchar* log_str = const_cast<char*>(log.c_str());
 
             glGetProgramInfoLog(id_, log_size, &log_size, log_str);
+            TEST_OPENGL_ERROR();
 
             std::cerr << "Error linking program: " << log_str << std::endl;
         }

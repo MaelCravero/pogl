@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "gl/gl.hh"
+#include "gl/vbo.hh"
 
 namespace gl
 {
@@ -10,43 +11,45 @@ namespace gl
     class SSBO : public Object
     {
     public:
-        using data_t = std::vector<T>;
+        using vbo_t = gl::VBO<T>;
+        using data_t = typename vbo_t::data_t;
 
-        SSBO(data_t data, GLuint index);
+        SSBO(vbo_t& vbo, GLuint index);
         ~SSBO() = default;
         SSBO(const SSBO& other) = delete;
 
         void update() const;
         void bind() const;
         void map_buffer();
+        void unmap();
 
         inline data_t data_get() const
         {
-            return data_;
+            return vbo_.data_get();
         }
 
         inline data_t& data_get()
         {
-            return data_;
+            return vbo_.data_get();
         }
 
         inline T& operator[](std::size_t i)
         {
-            return data_[i];
+            return data_get()[i];
         }
 
         inline const T operator[](std::size_t i) const
         {
-            return data_[i];
+            return data_get()[i];
         }
 
     private:
         inline std::size_t data_size() const
         {
-            return data_.size() * sizeof(T);
+            return data_get().size() * sizeof(T);
         }
 
-        data_t data_;
+        vbo_t& vbo_;
     };
 } // namespace gl
 

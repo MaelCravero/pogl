@@ -30,6 +30,16 @@ namespace gl
             return data_;
         }
 
+        inline T& operator[](std::size_t i)
+        {
+            return data_[i];
+        }
+
+        inline const T operator[](std::size_t i) const
+        {
+            return data_[i];
+        }
+
     private:
         inline std::size_t data_size() const
         {

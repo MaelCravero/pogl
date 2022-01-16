@@ -11,8 +11,9 @@
     {                                                                          \
         GLenum err = glGetError();                                             \
         if (err != GL_NO_ERROR)                                                \
-            std::cerr << "OpenGL ERROR! " << __FILE__ << ":" << __LINE__       \
-                      << " : " << gluErrorString(err) << std::endl;            \
+            std::cerr << "OpenGL ERROR! " << __FILE__ << ":" << __FUNCTION__   \
+                      << ":" << __LINE__ << " : " << gluErrorString(err)       \
+                      << std::endl;                                            \
     } while (0)
 
 namespace gl

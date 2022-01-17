@@ -24,7 +24,7 @@
 
 static std::unique_ptr<Engine> engine = nullptr;
 
-static std::size_t nb_particles = 1000000;
+static std::size_t nb_particles = 100000;
 
 static std::unique_ptr<camera::Camera> cam = nullptr;
 
@@ -79,15 +79,8 @@ int main(int argc, char* argv[])
 
     engine->bind_vao();
 
-    // particles::Fire3D particle(nb_particles, life_span, engine->program);
-    static particles::ComputeParticle::vertices_t::data_t vertices{
-        -0.01f, -0.01f, 0.0f, // left
-        0.01f,  -0.01f, 0.0f, // right
-        0.0f,   0.01f,  0.0f, // top
-        0.0f,   -0.02f, 0.0f // top
-    };
     particles::ComputeParticle particle(data, nb_particles, engine->program);
-    // particles::Fire particle(nb_particles, life_span);
+    // particles::Sun3D particle(nb_particles, data.life_span);
 
     particle.bind();
 

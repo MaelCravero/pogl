@@ -10,7 +10,7 @@ namespace particles
             -0.01f, -0.01f, 0.0f, // left
             0.01f,  -0.01f, 0.0f, // right
             0.0f,   0.01f,  0.0f, // top
-            0.0f,   -0.02f, 0.0f // top
+            // 0.0f,   -0.02f, 0.0f // top
         };
 
     }

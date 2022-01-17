@@ -7,6 +7,9 @@
 
 namespace particles
 {
+    static unsigned NB_BATCHES = 0;
+    static unsigned BATCH_SIZE = 1024;
+
     ComputeParticle::ComputeParticle(const DataPack& data,
                                      std::size_t nb_particles,
                                      gl::Program& main_prog)
@@ -45,7 +48,20 @@ namespace particles
                                   colors_ssbo(colors_, 1),
                                   life_ssbo(life_, 2)});
 
+        NB_BATCHES =
+            nb_particles_ / BATCH_SIZE + (nb_particles_ % BATCH_SIZE != 0);
+
         spawn();
+
+        data_->life.map_buffer();
+        data_->life.unmap();
+
+        auto i = 0u;
+        while (life_[i] != 0)
+            i++;
+
+        std::cerr << NB_BATCHES << " batches\n";
+        std::cerr << i << " initialized particles\n";
     }
 
     void ComputeParticle::bind() const
@@ -64,7 +80,7 @@ namespace particles
         data_->colors.bind();
         data_->life.bind();
 
-        spawn_prog_.dispatch_compute(nb_particles_ / 1024 + 1, 1, 1);
+        spawn_prog_.dispatch_compute(NB_BATCHES, 1, 1);
 
         main_prog_.use();
     }
@@ -78,7 +94,7 @@ namespace particles
         data_->colors.bind();
         data_->life.bind();
 
-        update_prog_.dispatch_compute(nb_particles_ / 1024 + 1, 1, 1);
+        update_prog_.dispatch_compute(NB_BATCHES, 1, 1);
 
         main_prog_.use();
 
@@ -94,7 +110,7 @@ namespace particles
         glVertexAttribDivisor(2, 1);
         TEST_OPENGL_ERROR();
 
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 4, nb_particles_);
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, nb_particles_);
         TEST_OPENGL_ERROR();
     }
 

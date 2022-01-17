@@ -61,7 +61,7 @@ namespace particles
         glVertexAttribDivisor(2, 1);
         TEST_OPENGL_ERROR();
 
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 4, nb_particles_);
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, nb_particles_);
         TEST_OPENGL_ERROR();
     }
 

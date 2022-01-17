@@ -38,11 +38,12 @@ highp float rand(float v)
     return _rand(vec2(v * 10000, gl_GlobalInvocationID.x));
 }
 
-float x_radius = 0.1f;
-float y_radius = 0.05f;
+float x_radius = 4.0f;
+float y_radius = 4.0f;
+float depth_radius = 4.0f;
 
 float center_x = 0.0f;
-float center_y = -0.8f;
+float center_y = 0.0f;
 
 void main()
 {
@@ -58,10 +59,11 @@ void main()
     float x = r * cos(t);
     float y = r * sin(t);
 
-    pos[X] = vec4(x_radius * x + center_x, y_radius * y + center_y, 0.0f, 1.0f);
+    pos[X] = vec4(x_radius * x + center_x, y_radius * y + center_y,
+                  random.x * depth_radius, 1.0f);
 
     color[X] = initial_color;
-    color[X].g -= sqrt(x * x + y * y) / 3.0f;
+    color[X].a *= rand(random.z);
 
     life[X] = life_span;
 }

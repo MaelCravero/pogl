@@ -21,10 +21,6 @@ struct DataPack
         data >> life_span;
         data >> initial_color.r >> initial_color.g >> initial_color.b
             >> initial_color.a;
-        data >> center.first >> center.second;
-        data >> radius.first >> radius.second;
-        data >> k;
-        data >> sparsity;
 
         float v;
         while (vert >> v)
@@ -39,10 +35,6 @@ struct DataPack
 
     GLfloat life_span;
     gl::Color initial_color;
-    std::pair<GLfloat, GLfloat> center;
-    std::pair<GLfloat, GLfloat> radius;
-    GLfloat k;
-    GLfloat sparsity;
 
     std::vector<float> vertices;
 
